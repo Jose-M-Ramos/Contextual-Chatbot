@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="https://github.com/Jose-M-Ramos/Contextual-Chatbot/blob/main/chat-bot.jpg" width="800" height="400">
+  <img src="https://github.com/Jose-M-Ramos/Contextual-Chatbot/blob/main/chat-bot.jpg" width="600" height="400">
 </p>
 
 
