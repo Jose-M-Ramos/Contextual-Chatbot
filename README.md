@@ -1,5 +1,6 @@
 # Contextual-Chatbot
 
+This code is implementing a natural language processing (NLP) chatbot using TensorFlow. The chatbot is trained to understand and respond to user input based on a set of predefined patterns and responses stored in a JSON file called 'intents.json'.
 
 <p align="center">
   <img src="https://github.com/Jose-M-Ramos/Contextual-Chatbot/blob/main/chat-bot.jpg" width="600" height="400">
