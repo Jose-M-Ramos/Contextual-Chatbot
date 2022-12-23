@@ -1,6 +1,8 @@
 #libraries needed for NLP
 import nltk
 nltk.download('punkt')
+import json
+from itertools import chain
 
 # Choose a stemmer
 from nltk.stem import PorterStemmer
@@ -9,9 +11,7 @@ stemmer = PorterStemmer()
 #Libraries needed for TensorFlow processing
 import tensorflow as tf
 import numpy as np
-import tflearn
 import random
-import json
 
 # Load the intents data from the JSON file
 with open('intents.json') as json_data:
@@ -47,20 +47,21 @@ training = np.array(training, dtype=object)
 train_x, train_y = training[:, 0], training[:, 1]
 
 # Reset the TensorFlow graph
-tf.compat.v1.reset_default_graph()
+tf.keras.backend.clear_session()
 
-# Build the neural network
-net = tflearn.input_data(shape=[None, len(train_x[0])])
-net = tflearn.fully_connected(net, 10)
-net = tflearn.fully_connected(net, 10)
-net = tflearn.fully_connected(net, len(train_y[0]), activation='softmax')
-net = tflearn.regression(net)
+# Build the model
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(10, activation='relu', input_shape=(len(train_x[0]),)),
+    tf.keras.layers.Dense(10, activation='relu'),
+    tf.keras.layers.Dense(len(train_y[0]), activation='softmax')
+])
 
-# Define the model and set up TensorBoard
-model = tflearn.DNN(net, tensorboard_dir='tflearn_logs')
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(train_x, train_y, n_epoch=1000, batch_size=8, show_metric=True)
+model.fit(train_x, train_y, epochs=1000, batch_size=8)
 
 # Save the model
-model.save('model.tflearn')
+model.save('model.h5')
+
