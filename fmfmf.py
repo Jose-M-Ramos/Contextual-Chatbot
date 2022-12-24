@@ -3,6 +3,7 @@ import numpy as np
 import random
 import json
 import pickle
+import training
 
 # Load the intents data from the JSON file
 with open('intents.json') as json_data:
@@ -67,3 +68,5 @@ def response(phrase):
         # Return a random response from the matching intent
         return random.choice(i['responses'])
 
+if __name__ == "__main__":
+    response()
