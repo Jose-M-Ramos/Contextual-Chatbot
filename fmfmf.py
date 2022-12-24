@@ -19,6 +19,9 @@ classes = data['classes']
 train_x = data['train_x']
 train_y = data['train_y']
 
+#load the saved model
+model.load('./model.h5')
+
 def clean_up_sentence(phrase):
   # Tokenize the phrase
   sentence_words = nltk.word_tokenize(phrase)
