@@ -31,7 +31,7 @@ This chatbot requires the following libraries:
 
 ## How to use?
 
-'''python
+```python
 # Import the necessary libraries
 import nltk
 import tensorflow as tf
@@ -58,9 +58,7 @@ train_y = data['train_y']
 phrase = "What are your hours?"
 print(classify(phrase))
 print(response(phrase))
-
-
-'''
+```
 
 ## Limitations
 
