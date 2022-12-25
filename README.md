@@ -31,5 +31,36 @@ This chatbot requires the following libraries:
 
 ## How to use?
 
+'''python
+# Import the necessary libraries
+import nltk
+import tensorflow as tf
+import numpy as np
+import json
+import random
+import pickle
+
+# Load the intents data from the JSON file
+with open('intents.json') as json_data:
+    intents = json.load(json_data)
+
+# Load the saved model
+model = tf.keras.models.load_model('model.h5')
+
+# Load the data from the pickle file
+data = pickle.load(open("training_data", "rb"))
+words = data['word']
+classes = data['classes']
+train_x = data['train_x']
+train_y = data['train_y']
+
+# Use the classify and response functions to generate a response
+phrase = "What are your hours?"
+print(classify(phrase))
+print(response(phrase))
+
+
+'''
+
 ## Limitations
 
