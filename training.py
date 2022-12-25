@@ -1,8 +1,8 @@
+from itertools import chain
 #libraries needed for NLP
 import nltk
 nltk.download('punkt')
-import json
-from itertools import chain
+
 
 # Choose a stemmer
 from nltk.stem import PorterStemmer
@@ -21,30 +21,38 @@ with open('intents.json') as json_data:
 patterns_and_responses = [(nltk.word_tokenize(pattern), intent['tag']) for intent in intents['intents'] for pattern in intent['patterns']]
 
 # Extract the unique words from the patterns
-words = sorted(set(chain.from_iterable(patterns_and_responses)))
+words = sorted(set(list(chain.from_iterable([pattern for pattern, response in patterns_and_responses]))))
 
 # Stem the words and lowercase them
 words = [stemmer.stem(token.lower()) for token in words]
-
 # Extract the unique response types
 types = sorted(set(response for _, response in patterns_and_responses))
 
+#print(types)
+#print(words)
 # Create the training data
+
 training = []
-output = []
+
+# Create an empty array for output
 output_empty = [0] * len(types)
-for pattern, response in patterns_and_responses:
-    bag = [1 if stemmer.stem(token.lower()) in words else 0 for token in pattern]
-    output_row = list(output_empty)
-    output_row[types.index(response)] = 1
-    training.append((bag, output_row))
+
+# Create training set bag of words for each sentence
+for doc in patterns_and_responses:
+    # Initialize bag of words
+    bag = [1 if stemmer.stem(w.lower()) in bag else 0 for w in words]
+    
+    # Output is 1 for current tag and 0 for the rest of other tags
+    output_row = [1 if c == doc[1] else 0 for c in types]
+    
+    training.append([bag, output_row])
 
 # Shuffle the training data and convert it to a numpy array
 random.shuffle(training)
 training = np.array(training, dtype=object)
 
 # Split the training data into input and output lists
-train_x, train_y = training[:, 0], training[:, 1]
+train_x, train_y = list(training[:, 0]), list(training[:, 1])
 
 # Reset the TensorFlow graph
 tf.keras.backend.clear_session()
