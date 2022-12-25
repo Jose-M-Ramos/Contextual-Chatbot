@@ -1,27 +1,3 @@
-import nltk
-import numpy as np
-import random
-import json
-import pickle
-import training
-
-# Load the intents data from the JSON file
-with open('intents.json') as json_data:
-    intents = json.load(json_data)
-
-# Save the words, classes, train_x, and train_y variables to a pickle file
-pickle.dump({'word': Words, 'classes': Types, 'train_x': train_x, 'train_y': train_y}, open("training_data", "wb"))
-
-# Load the data from the pickle file
-data = pickle.load(open("training_data", "rb"))
-words = data['word']
-classes = data['classes']
-train_x = data['train_x']
-train_y = data['train_y']
-
-#load the saved model
-model.load('./model.h5')
-
 def clean_up_sentence(phrase):
   # Tokenize the phrase
   sentence_words = nltk.word_tokenize(phrase)
@@ -42,34 +18,33 @@ def bow(phrase, words, show_details=False):
           print("Found in bag: %s" % w)
   return np.array(bag)
 
-threshold = 0.0
-def classify(phrase):
-  # Generate probabilities from the model
-  results = model.predict([bow(phrase, words)])[0]
+ERROR_THRESHOLD = 0.0
+def classify(sentence):
+  #generate probabilities from the model
+  results = model.predict([bow(sentence, words)])[0]
   
-  # Filter out predictions below the threshold
-  results = [[i, k] for i, k in enumerate(results) if k > threshold]
+  #filter out prediction below a threshold
+  results = [[i,r] for i, r in enumerate(results) if r> ERROR_THRESHOLD]
   
-  # Sort the results by probability
+  #sort by strength of probability
   results.sort(key=lambda x: x[1], reverse=True)
-  return_list = []
+  return_list=[]
   
-  # Create a list of (tag, probability) tuples
-  for k in results:
-    return_list.append((classes[k[0]], k[1]))
+  for r in results:
+    return_list.append((classes[r[0]], r[1]))
   
-  # Return the list of tuples
+  #return tuple of intent and probability
   return return_list
+
 
 def response(phrase):
   results = classify(phrase)
   
   if results:
     # Find the first matching intent
-    for i in intents['intents']:
-      if i['tag'] == results[0][0]:
-        # Return a random response from the matching intent
-        return random.choice(i['responses'])
-
-if __name__ == "__main__":
-    response()
+    while results:
+      for i in intents['intents']:
+        if i['tag'] == results[0][0]:
+          # Return a random response from the matching intent
+          return print(random.choice(i['responses']))
+      results.pop(0)
