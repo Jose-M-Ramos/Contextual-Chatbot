@@ -55,7 +55,7 @@ train_x = data['train_x']
 train_y = data['train_y']
 
 # Use the classify and response functions to generate a response
-phrase = "What are your hours?"
+phrase = "Do you take credit cards?"
 print(classify(phrase))
 print(response(phrase))
 ```
