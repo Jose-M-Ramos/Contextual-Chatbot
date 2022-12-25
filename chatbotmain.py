@@ -46,5 +46,5 @@ def response(phrase):
       for i in intents['intents']:
         if i['tag'] == results[0][0]:
           # Return a random response from the matching intent
-          return print(random.choice(i['responses']))
+          return random.choice(i['responses'])
       results.pop(0)
